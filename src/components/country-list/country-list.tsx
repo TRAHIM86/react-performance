@@ -25,13 +25,17 @@ export const CountryList = ({
   sortField,
   sortOrder,
 }: CountryListProps) => {
+  const yearMap = useMemo(
+    () => new Map(countries.map((country) => [country.id, createYearDataMap(country.data)])),
+    [countries]
+  );
+
   // длобавил useMemo, для мемо отфильтрованного и отсортированного списка
   // пересчет только от зависимсотей (строка поиска, регин, порядок сорт, год)
   const filteredCountries = useMemo(() => {
     // кэшируем заранее map всех годов для каждой страны, т.к. ранее
     // код map выполнялся в createYearDataMap() и вызывался при каждом
     // сравнении двух стран в сортировке
-
     const yearMap = new Map(
       countries.map((country) => [country.id, createYearDataMap(country.data)])
     );
@@ -66,6 +70,7 @@ export const CountryList = ({
           country={country}
           selectedYear={selectedYear}
           selectedColumns={selectedColumns}
+          yearDataMap={yearMap.get(country.id)}
         />
       ))}
     </div>

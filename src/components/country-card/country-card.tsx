@@ -1,4 +1,4 @@
-import type { Country } from '../../types';
+import type { Country, YearData } from '../../types';
 import { DataTable } from '../data-table/data-table';
 /*import {
   getPopulationForYear,
@@ -13,14 +13,23 @@ type CountryCardProps = {
   country: Country;
   selectedYear: number;
   selectedColumns: string[];
+  yearDataMap: Map<number, YearData> | undefined;
 };
 
-export const CountryCard = ({ country, selectedYear, selectedColumns }: CountryCardProps) => {
+export const CountryCard = ({
+  country,
+  selectedYear,
+  selectedColumns,
+  yearDataMap,
+}: CountryCardProps) => {
   /*const yearDataMap = createYearDataMap(country.data);
   const population = getPopulationForYear(yearDataMap, selectedYear);
   const co2 = getCo2ForYear(yearDataMap, selectedYear);*/
 
-  const yearData = country.data.find((d) => d.year === selectedYear);
+  // исправил вытягивание данных через переданный мап годов
+  // по выбранной стране ("Poland" => ключ 2000,2001,2002,2003...).
+  // значение - данные по годам
+  const yearData = yearDataMap?.get(selectedYear);
   const population = yearData?.population;
   const co2 = yearData?.co2;
 
