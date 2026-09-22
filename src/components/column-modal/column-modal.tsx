@@ -19,6 +19,8 @@ export const ColumnModal = ({
     return null;
   }
 
+  console.log('availableColumns:', availableColumns);
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
