@@ -1,10 +1,10 @@
 import type { Country } from '../../types';
 import { DataTable } from '../data-table/data-table';
-import {
+/*import {
   getPopulationForYear,
   getCo2ForYear,
   createYearDataMap,
-} from '../../utils/data-transformers';
+} from '../../utils/data-transformers';*/
 import { formatNumber } from '../../utils/format-utils';
 
 import styles from './country-card.module.css';
@@ -16,9 +16,13 @@ type CountryCardProps = {
 };
 
 export const CountryCard = ({ country, selectedYear, selectedColumns }: CountryCardProps) => {
-  const yearDataMap = createYearDataMap(country.data);
+  /*const yearDataMap = createYearDataMap(country.data);
   const population = getPopulationForYear(yearDataMap, selectedYear);
-  const co2 = getCo2ForYear(yearDataMap, selectedYear);
+  const co2 = getCo2ForYear(yearDataMap, selectedYear);*/
+
+  const yearData = country.data.find((d) => d.year === selectedYear);
+  const population = yearData?.population;
+  const co2 = yearData?.co2;
 
   return (
     <div className={styles.card}>
