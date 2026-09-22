@@ -49,7 +49,7 @@ export const CountryCard = ({
         </div>
       </div>
 
-      <DataTable data={country.data} year={selectedYear} columns={selectedColumns} />
+      <DataTable data={yearData} year={selectedYear} columns={selectedColumns} />
     </div>
   );
 };
