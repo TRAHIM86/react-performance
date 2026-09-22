@@ -27,7 +27,16 @@ export const CountryList = ({
 }: CountryListProps) => {
   // длобавил useMemo, для мемо отфильтрованного и отсортированного списка
   // пересчет только от зависимсотей (строка поиска, регин, порядок сорт, год)
+
+  // кэшируем заранее map всех годов для каждой страны, т.к. ранее
+  // код map выполнялся в createYearDataMap() и вызывался при каждом
+  // сравнении двух стран в сортировке
+
   const filteredCountries = useMemo(() => {
+    const yearMap = new Map(
+      countries.map((country) => [country.id, createYearDataMap(country.data)])
+    );
+
     return countries
       .filter((c) => {
         const matchesSearch = c.id.toLowerCase().includes(searchQuery.toLowerCase());
@@ -38,8 +47,13 @@ export const CountryList = ({
         if (sortField === 'name') {
           return sortOrder === 'asc' ? a.id.localeCompare(b.id) : b.id.localeCompare(a.id);
         } else {
-          const popA = getPopulationForYear(createYearDataMap(a.data), selectedYear) || 0;
-          const popB = getPopulationForYear(createYearDataMap(b.data), selectedYear) || 0;
+          // получить
+          const mapA = yearMap.get(a.id);
+          const mapB = yearMap.get(b.id);
+
+          const popA = mapA ? getPopulationForYear(mapA, selectedYear) || 0 : 0;
+          const popB = mapB ? getPopulationForYear(mapB, selectedYear) || 0 : 0;
+
           return sortOrder === 'asc' ? popA - popB : popB - popA;
         }
       });

@@ -22,8 +22,8 @@
 
 ### Interaction C: Change year
 
-- **Commit duration**: 0.1156 s
-- **Render duration**: 115.4 ms
+- **Commit duration**: 1.7584 s
+- **Render duration**: 1758.2 ms
 - **Screenshot**: ![screenshot](screenshots/baseline/interaction_change_year_c.png)
 
 <!-- Переключение колонок -->
