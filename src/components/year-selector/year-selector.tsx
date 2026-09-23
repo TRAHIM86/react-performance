@@ -1,4 +1,28 @@
 import styles from './year-selector.module.css';
+import { memo } from 'react';
+
+type SearchBarProps = {
+  value: string;
+  onChange: (value: string) => void;
+};
+
+export const SearchBar = memo(({ value, onChange }: SearchBarProps) => {
+  return (
+    <div className={styles.container}>
+      <label htmlFor="search" className={styles.label}>
+        Search countries:
+      </label>
+      <input
+        id="search"
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Type to search..."
+        className={styles.input}
+      />
+    </div>
+  );
+});
 
 type YearSelectorProps = {
   year: number;
@@ -6,7 +30,7 @@ type YearSelectorProps = {
   onChange: (year: number) => void;
 };
 
-export const YearSelector = ({ year, years, onChange }: YearSelectorProps) => {
+export const YearSelector = memo(({ year, years, onChange }: YearSelectorProps) => {
   return (
     <div className={styles.container}>
       <label htmlFor="year" className={styles.label}>
@@ -26,4 +50,4 @@ export const YearSelector = ({ year, years, onChange }: YearSelectorProps) => {
       </select>
     </div>
   );
-};
+});

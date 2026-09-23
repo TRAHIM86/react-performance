@@ -1,6 +1,6 @@
 import type { YearData } from '../../types';
 import { formatNumber } from '../../utils/format-utils';
-
+import { memo } from 'react';
 import styles from './data-table.module.css';
 
 type DataTableProps = {
@@ -9,7 +9,7 @@ type DataTableProps = {
   columns: string[];
 };
 
-export const DataTable = ({ data, year, columns }: DataTableProps) => {
+export const DataTable = memo(({ data, year, columns }: DataTableProps) => {
   // убрали тяжелыый фильтр, т.к. получаем текущий год от родителя
   //const yearData = data.filter((d) => d.year === year);
 
@@ -38,4 +38,4 @@ export const DataTable = ({ data, year, columns }: DataTableProps) => {
       </tbody>
     </table>
   );
-};
+});
