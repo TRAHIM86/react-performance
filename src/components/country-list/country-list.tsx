@@ -1,10 +1,16 @@
-import type { Country } from '../../types';
+import type { Country, YearData } from '../../types';
 import { CountryCard } from '../country-card/country-card';
 import { getPopulationForYear, createYearDataMap } from '../../utils/data-transformers';
 
 import styles from './country-list.module.css';
 import { useMemo } from 'react';
 import { memo } from 'react';
+
+// lsit - компонент виртуализации. Рендерит толко видимые строки
+// RowComponentProps - тип для пропсов компонента строки
+// принимает четыре пропса: коспонент, который редерит 1 строку
+// количество строк, высоту строки и данные для строк  (пропсы)
+import { List, type RowComponentProps } from 'react-window';
 
 type CountryListProps = {
   countries: Country[];
@@ -15,6 +21,36 @@ type CountryListProps = {
   sortField: 'name' | 'population';
   sortOrder: 'asc' | 'desc';
   onYearChange: (year: number) => void;
+};
+
+// компонет для рендера 1 строки. Обяхательных первых два
+// пропса (индекс и стили). Остальное любые пропсы
+const CountryRowComponent = ({
+  index,
+  style,
+  countries,
+  selectedYear,
+  selectedColumns,
+  yearMap,
+}: RowComponentProps<{
+  countries: Country[];
+  selectedYear: number;
+  selectedColumns: string[];
+  yearMap: Map<string, Map<number, YearData>>;
+}>) => {
+  // получить данные страны по индексу
+  const countryData = countries[index];
+
+  return (
+    <div style={style}>
+      <CountryCard
+        country={countryData}
+        selectedYear={selectedYear}
+        selectedColumns={selectedColumns}
+        yearDataMap={yearMap.get(countryData.id)}
+      ></CountryCard>
+    </div>
+  );
 };
 
 export const CountryList = memo(
@@ -28,6 +64,9 @@ export const CountryList = memo(
     sortOrder,
   }: CountryListProps) => {
     const yearMap = useMemo(
+      // кэшируем заранее map всех годов для каждой страны, т.к. ранее
+      // код map выполнялся в createYearDataMap() и вызывался при каждом
+      // сравнении двух стран в сортировке
       () => new Map(countries.map((country) => [country.id, createYearDataMap(country.data)])),
       [countries]
     );
@@ -35,13 +74,6 @@ export const CountryList = memo(
     // длобавил useMemo, для мемо отфильтрованного и отсортированного списка
     // пересчет только от зависимсотей (строка поиска, регин, порядок сорт, год)
     const filteredCountries = useMemo(() => {
-      // кэшируем заранее map всех годов для каждой страны, т.к. ранее
-      // код map выполнялся в createYearDataMap() и вызывался при каждом
-      // сравнении двух стран в сортировке
-      const yearMap = new Map(
-        countries.map((country) => [country.id, createYearDataMap(country.data)])
-      );
-
       return countries
         .filter((c) => {
           const matchesSearch = c.id.toLowerCase().includes(searchQuery.toLowerCase());
@@ -62,19 +94,29 @@ export const CountryList = memo(
             return sortOrder === 'asc' ? popA - popB : popB - popA;
           }
         });
-    }, [countries, searchQuery, selectedRegion, sortField, sortOrder, selectedYear]);
+    }, [countries, searchQuery, selectedRegion, sortField, sortOrder, selectedYear, yearMap]);
 
     return (
       <div className={styles.countryList}>
-        {filteredCountries.map((country) => (
-          <CountryCard
-            key={country.id}
-            country={country}
-            selectedYear={selectedYear}
-            selectedColumns={selectedColumns}
-            yearDataMap={yearMap.get(country.id)}
-          />
-        ))}
+        <List
+          // внутри листа сама прокрутка и рендер
+
+          // компонент, который рендерит каждую строку
+          rowComponent={CountryRowComponent}
+          // общее число строк (у нас список отфильтрованыых стран)
+          rowCount={filteredCountries.length}
+          // высота каждой строки в пикселях
+          rowHeight={300}
+          // объект который нужно пробросить в дочерний элемент
+          // листа (как пропсы после индекса и стиля). Здесь наши данные
+          // для рендера (год, выбранные колонки, мап() по выбранному году)
+          rowProps={{
+            countries: filteredCountries,
+            selectedYear,
+            selectedColumns,
+            yearMap,
+          }}
+        />
       </div>
     );
   }
