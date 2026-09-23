@@ -97,27 +97,26 @@ export const CountryList = memo(
     }, [countries, searchQuery, selectedRegion, sortField, sortOrder, selectedYear, yearMap]);
 
     return (
-      <div className={styles.countryList}>
-        <List
-          // внутри листа сама прокрутка и рендер
+      <List
+        // внутри листа сама прокрутка и рендер
 
-          // компонент, который рендерит каждую строку
-          rowComponent={CountryRowComponent}
-          // общее число строк (у нас список отфильтрованыых стран)
-          rowCount={filteredCountries.length}
-          // высота каждой строки в пикселях
-          rowHeight={300}
-          // объект который нужно пробросить в дочерний элемент
-          // листа (как пропсы после индекса и стиля). Здесь наши данные
-          // для рендера (год, выбранные колонки, мап() по выбранному году)
-          rowProps={{
-            countries: filteredCountries,
-            selectedYear,
-            selectedColumns,
-            yearMap,
-          }}
-        />
-      </div>
+        // компонент, который рендерит каждую строку
+        rowComponent={CountryRowComponent}
+        // общее число строк (у нас список отфильтрованыых стран)
+        rowCount={filteredCountries.length}
+        // высота каждой строки в пикселях
+        rowHeight={300}
+        // объект который нужно пробросить в дочерний элемент
+        // листа (как пропсы после индекса и стиля). Здесь наши данные
+        // для рендера (год, выбранные колонки, мап() по выбранному году)
+        rowProps={{
+          countries: filteredCountries,
+          selectedYear,
+          selectedColumns,
+          yearMap,
+        }}
+        style={{ height: 600, width: '100%', border: '3px solid black' }}
+      />
     );
   }
 );

@@ -15,8 +15,6 @@ export const ColumnModal = memo(
       return null;
     }
 
-    console.log('availableColumns:', availableColumns);
-
     return (
       <div className={styles.overlay}>
         <div className={styles.modal}>
