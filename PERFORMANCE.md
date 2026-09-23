@@ -34,6 +34,30 @@
 - **Render duration**: 114.1 ms
 - **Screenshot**: ![screenshot](screenshots/baseline/interaction_toggle_column_d.png)
 
+<!-- *** ПОСЛЕ ОПТИМИЗАЦИИ *** -->
+
+## Optimized Measurements
+
+### Interaction A: Sort countries
+
+- **Commit duration**: 149.3 s
+- **Screenshot**: ![screenshot](screenshots/optimized/interaction_sort_countries_a.png)
+
+### Interaction B: Search countries
+
+- **Commit duration**: 122.0 s
+- **Screenshot**: ![screenshot](screenshots/optimized/interaction_search_countries_b.png)
+
+### Interaction C: Change year
+
+- **Commit duration**: 120.7 s
+- **Screenshot**: ![screenshot](screenshots/optimized/interaction_change_year_c.png)
+
+### Interaction D: Toggle column
+
+- **Commit duration**: 108.7 s
+- **Screenshot**: ![screenshot](screenshots/optimized/interaction_toggle_column_d.png)
+
 ## Summary of Improvements
 
 | Interaction      | Baseline (ms) | Optimized (ms) | Improvement |
