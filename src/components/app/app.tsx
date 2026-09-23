@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useCo2Data } from '../../hooks/useCo2Data';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { SearchBar } from '../search-bar/search-bar';
@@ -35,37 +35,69 @@ export const App = () => {
   const years = data ? getAvailableYears(data) : [];
   const availableColumns = getAvailableColumns();
 
-  const handleSearch = (value: string) => {
+  // функции handle обернул в useCallback, т.к. создаются каждый
+  // раз и передаются как пропсы
+
+  const handleSearch = useCallback((value: string) => {
+    setState((prev) => ({ ...prev, searchQuery: value }));
+  }, []);
+
+  /*const handleSearch = (value: string) => {
     setState({ ...state, searchQuery: value });
-  };
+  };*/
 
-  const handleYearChange = (year: number) => {
+  const handleYearChange = useCallback((year: number) => {
+    setState((prev) => ({ ...prev, selectedYear: year }));
+  }, []);
+
+  /*const handleYearChange = (year: number) => {
     setState({ ...state, selectedYear: year });
-  };
+  };*/
 
-  const handleSortFieldChange = (field: 'name' | 'population') => {
+  const handleSortFieldChange = useCallback((field: 'name' | 'population') => {
+    setState((prev) => ({ ...prev, sortField: field }));
+  }, []);
+
+  /*const handleSortFieldChange = (field: 'name' | 'population') => {
     setState({ ...state, sortField: field });
-  };
+  };*/
 
-  const handleSortOrderToggle = () => {
+  const handleSortOrderToggle = useCallback(() => {
+    setState((prev) => ({ ...prev, sortOrder: prev.sortOrder === 'asc' ? 'desc' : 'asc' }));
+  }, []);
+
+  /*const handleSortOrderToggle = () => {
     setState({
       ...state,
       sortOrder: state.sortOrder === 'asc' ? 'desc' : 'asc',
     });
-  };
+  };*/
 
-  const handleColumnToggle = (column: string) => {
+  const handleColumnToggle = useCallback((column: string) => {
+    setState((prev) => ({
+      ...prev,
+      selectedColumns: prev.selectedColumns.includes(column)
+        ? prev.selectedColumns.filter((c) => c !== column)
+        : [...prev.selectedColumns, column],
+    }));
+  }, []);
+
+  /*const handleColumnToggle = (column: string) => {
     setState({
       ...state,
       selectedColumns: state.selectedColumns.includes(column)
         ? state.selectedColumns.filter((c) => c !== column)
         : [...state.selectedColumns, column],
     });
-  };
+  };*/
 
-  const handleModalToggle = () => {
+  const handleModalToggle = useCallback(() => {
+    setState((prev) => ({ ...prev, isColumnModalOpen: !prev.isColumnModalOpen }));
+  }, []);
+
+  /*const handleModalToggle = () => {
     setState({ ...state, isColumnModalOpen: !state.isColumnModalOpen });
-  };
+  };*/
 
   if (isLoading) {
     return <LoadingSpinner />;
