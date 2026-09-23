@@ -2,7 +2,6 @@ import type { Country, YearData } from '../../types';
 import { CountryCard } from '../country-card/country-card';
 import { getPopulationForYear, createYearDataMap } from '../../utils/data-transformers';
 
-import styles from './country-list.module.css';
 import { useMemo } from 'react';
 import { memo } from 'react';
 
