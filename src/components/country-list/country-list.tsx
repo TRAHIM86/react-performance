@@ -9,7 +9,8 @@ import { memo } from 'react';
 // RowComponentProps - тип для пропсов компонента строки
 // принимает четыре пропса: коспонент, который редерит 1 строку
 // количество строк, высоту строки и данные для строк  (пропсы)
-import { List, type RowComponentProps } from 'react-window';
+// + useDynamicRowHeight для динамисевкой высоты строки
+import { List, type RowComponentProps, useDynamicRowHeight } from 'react-window';
 
 type CountryListProps = {
   countries: Country[];
@@ -62,6 +63,12 @@ export const CountryList = memo(
     sortField,
     sortOrder,
   }: CountryListProps) => {
+    //используем динаическую высоту строки, т.к. высота скачет
+    // в зависимсоти от выбранных выбросов (чекбоксов)
+    const rowHeight = useDynamicRowHeight({
+      defaultRowHeight: 300,
+    });
+
     const yearMap = useMemo(
       // кэшируем заранее map всех годов для каждой страны, т.к. ранее
       // код map выполнялся в createYearDataMap() и вызывался при каждом
@@ -104,7 +111,7 @@ export const CountryList = memo(
         // общее число строк (у нас список отфильтрованыых стран)
         rowCount={filteredCountries.length}
         // высота каждой строки в пикселях
-        rowHeight={300}
+        rowHeight={rowHeight}
         // объект который нужно пробросить в дочерний элемент
         // листа (как пропсы после индекса и стиля). Здесь наши данные
         // для рендера (год, выбранные колонки, мап() по выбранному году)
