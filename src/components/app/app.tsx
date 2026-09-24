@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useCo2Data } from '../../hooks/useCo2Data';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { SearchBar } from '../search-bar/search-bar';
@@ -32,8 +32,11 @@ export const App = () => {
     isColumnModalOpen: false,
   });
 
-  const years = data ? getAvailableYears(data) : [];
-  const availableColumns = getAvailableColumns();
+  //const years = data ? getAvailableYears(data) : [];
+  const years = useMemo(() => (data ? getAvailableYears(data) : []), [data]);
+
+  //const availableColumns = getAvailableColumns();
+  const availableColumns = useMemo(() => getAvailableColumns(), []);
 
   // функции handle обернул в useCallback, т.к. создаются каждый
   // раз и передаются как пропсы
@@ -115,9 +118,9 @@ export const App = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>CO₂ Emissions Data Explorer</h1>
 
-      {/* Controls */}
       <div className={styles.controls}>
         <SearchBar value={state.searchQuery} onChange={handleSearch} />
+
         <YearSelector year={state.selectedYear} years={years} onChange={handleYearChange} />
 
         <div className={styles.sortContainer}>
@@ -143,7 +146,6 @@ export const App = () => {
         </div>
       </div>
 
-      {/* Country List */}
       <CountryList
         countries={data}
         searchQuery={state.searchQuery}
@@ -155,7 +157,6 @@ export const App = () => {
         onYearChange={handleYearChange}
       />
 
-      {/* Column Modal */}
       <ColumnModal
         isOpen={state.isColumnModalOpen}
         availableColumns={availableColumns}

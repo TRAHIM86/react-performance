@@ -1,5 +1,5 @@
 import styles from './year-selector.module.css';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 
 type SearchBarProps = {
   value: string;
@@ -30,7 +30,19 @@ type YearSelectorProps = {
   onChange: (year: number) => void;
 };
 
+// вынес в отдельный memo созданный селектор с опциями. Список на
+// 200+ стран рендерился каждый раз, а он фиксированный.
 export const YearSelector = memo(({ year, years, onChange }: YearSelectorProps) => {
+  const options = useMemo(
+    () =>
+      years.map((year) => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      )),
+    [years]
+  );
+
   return (
     <div className={styles.container}>
       <label htmlFor="year" className={styles.label}>
@@ -42,11 +54,7 @@ export const YearSelector = memo(({ year, years, onChange }: YearSelectorProps) 
         onChange={(e) => onChange(Number(e.target.value))}
         className={styles.select}
       >
-        {years.map((year) => (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        ))}
+        {options}
       </select>
     </div>
   );

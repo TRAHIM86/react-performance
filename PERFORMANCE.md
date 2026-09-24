@@ -62,8 +62,8 @@
 
 | Interaction      | Baseline (ms) | Optimized (ms) | Improvement |
 | ---------------- | ------------- | -------------- | ----------- |
-| Sort countries   | 1667.8        | 149.3          | 91.05%      |
-| Search countries | 108.8         | 122.0          | -12.13%     |
-| Change year      | 107.3         | 120.7          | -12.49%     |
-| Toggle column    | 114.1         | 108.7          | 4.73%       |
-| **Average**      | **499.5**     | **125.2**      | **17.79%**  |
+| Sort countries   | 1667.8        | 57,50          | 96,55%      |
+| Search countries | 108.8         | 34,50          | 68,29%      |
+| Change year      | 107.3         | 37,50          | 65,05%      |
+| Toggle column    | 114.1         | 24,90          | 78,18%      |
+| **Average**      | **499.5**     | **38,60**      | **77,02%**  |
