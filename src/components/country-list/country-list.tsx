@@ -70,10 +70,10 @@ export const CountryList = memo(
       defaultRowHeight: 300,
     });
 
+    // кэшируем заранее map всех годов для каждой страны, т.к. ранее
+    // код map выполнялся в createYearDataMap() и вызывался при каждом
+    // сравнении двух стран в сортировке
     const yearMap = useMemo(
-      // кэшируем заранее map всех годов для каждой страны, т.к. ранее
-      // код map выполнялся в createYearDataMap() и вызывался при каждом
-      // сравнении двух стран в сортировке
       () => new Map(countries.map((country) => [country.id, createYearDataMap(country.data)])),
       [countries]
     );
@@ -111,16 +111,16 @@ export const CountryList = memo(
         rowComponent={CountryRowComponent}
         // общее число строк (у нас список отфильтрованыых стран)
         rowCount={filteredCountries.length}
-        // высота каждой строки в пикселях
+        // высота каждой строки в пикселях или динамический (функция выше)
         rowHeight={rowHeight}
         // объект который нужно пробросить в дочерний элемент
         // листа (как пропсы после индекса и стиля). Здесь наши данные
         // для рендера (год, выбранные колонки, мап() по выбранному году)
         rowProps={{
           countries: filteredCountries,
-          selectedYear,
-          selectedColumns,
-          yearMap,
+          selectedYear: selectedYear,
+          selectedColumns: selectedColumns,
+          yearMap: yearMap,
         }}
         style={{ height: 600, width: '100%', border: '3px solid black' }}
       />
